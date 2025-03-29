@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Quiz</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        .quiz-container { width: 50%; margin: auto; padding: 20px; border: 1px solid #ccc; border-radius: 10px; }
+        .question { font-size: 20px; margin-bottom: 10px; }
+        .options { list-style: none; padding: 0; }
+        .options li { margin: 10px 0; }
+        button { padding: 10px 15px; font-size: 16px; cursor: pointer; margin: 10px; }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h2>AI Quiz</h2>
+        <div id="quiz"></div>
+        <button onclick="submitQuiz()">Submit</button>
+        <button id="retestBtn" onclick="retestQuiz()" style="display: none;">Retest</button>
+        <h3 id="result"></h3>
+    </div>
+    
+    <script>
+        const quizData = [
+            { question: "What does AI stand for?", options: ["Artificial Intelligence", "Automated Innovation", "Advanced Internet"], answer: "Artificial Intelligence" },
+            { question: "Who is known as the father of AI?", options: ["Alan Turing", "Elon Musk", "Isaac Newton"], answer: "Alan Turing" },
+            { question: "Which of these is a type of AI?", options: ["Machine Learning", "Gravity", "Photosynthesis"], answer: "Machine Learning" }
+        ];
+        
+        const quizContainer = document.getElementById("quiz");
+        const retestBtn = document.getElementById("retestBtn");
+        
+        function loadQuiz() {
+            quizContainer.innerHTML = "";
+            retestBtn.style.display = "none";
+            document.getElementById("result").innerText = "";
+            
+            quizData.forEach((q, index) => {
+                let questionBlock = document.createElement("div");
+                questionBlock.innerHTML = `<p class='question'>${q.question}</p>`;
+                let optionsList = document.createElement("ul");
+                optionsList.classList.add("options");
+                
+                q.options.forEach(option => {
+                    let listItem = document.createElement("li");
+                    listItem.innerHTML = `<input type='radio' name='q${index}' value='${option}'> ${option}`;
+                    optionsList.appendChild(listItem);
+                });
+                
+                questionBlock.appendChild(optionsList);
+                quizContainer.appendChild(questionBlock);
+            });
+        }
+        
+        function submitQuiz() {
+            let score = 0;
+            quizData.forEach((q, index) => {
+                let selectedOption = document.querySelector(`input[name='q${index}']:checked`);
+                if (selectedOption && selectedOption.value === q.answer) {
+                    score++;
+                }
+            });
+            
+            let percentage = (score / quizData.length) * 100;
+            if (percentage >= 85) {
+                document.getElementById("result").innerText = `Congratulations, move to next phase! You scored ${score} out of ${quizData.length}`;
+                retestBtn.style.display = "none";
+            } else {
+                document.getElementById("result").innerText = `You scored ${score} out of ${quizData.length}. You must retest until you pass.`;
+                retestBtn.style.display = "block";
+            }
+        }
+        
+        function retestQuiz() {
+            loadQuiz();
+        }
+        
+        loadQuiz();
+    </script>
+</body>
+</html>

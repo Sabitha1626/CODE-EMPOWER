@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Platform</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        ul { list-style-type: none; margin: 0; padding: 0; overflow: hidden; background-color: #3c8f56; }
+        li { float: left; }
+        li a { display: block; color: white; text-align: center; padding: 14px 16px; text-decoration: none; }
+        li a:hover { background-color: #111; }
+        .content { padding: 20px; }
+        .course-list, .account-details { text-align: left; max-width: 600px; margin: auto; }
+        .hidden { display: none; }
+        .quiz-container { width: 50%; margin: auto; padding: 20px; border: 1px solid #ccc; border-radius: 10px; }
+        .question { font-size: 20px; margin-bottom: 10px; }
+        .options { list-style: none; padding: 0; }
+        .options li { margin: 10px 0; }
+        button { padding: 10px 15px; font-size: 16px; cursor: pointer; margin: 10px; }
+        
+        /* Chatbot Styles */
+        #chatbotContainer { position: fixed; bottom: 80px; right: 20px; width: 300px; height: 400px; background: white; border: 1px solid #ccc; border-radius: 10px; display: none; box-shadow: 0 4px 8px rgba(0,0,0,0.2); overflow: hidden; }
+        #chatbotHeader { background: #3c8f56; color: white; padding: 10px; text-align: center; cursor: pointer; }
+        #chatbotMessages { height: 300px; padding: 10px; overflow-y: auto; border-bottom: 1px solid #ccc; }
+        #chatbotInputContainer { display: flex; }
+        #chatbotInput { flex: 1; padding: 10px; border: none; border-top: 1px solid #ccc; }
+        #chatbotSend { padding: 10px; background: #3c8f56; color: white; border: none; cursor: pointer; }
+        #chatbotButton { position: fixed; bottom: 20px; right: 20px; background: #3c8f56; color: white; padding: 10px 15px; border-radius: 50%; cursor: pointer; border: none; font-size: 18px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+    </style>
+</head>
+<body>
+    <ul>
+        <li><a href="#" onclick="showSection('home')">Home</a></li>
+        <li><a href="#" onclick="showSection('course')">Course</a></li>
+        <li><a href="#" onclick="showSection('quiz')">Quiz</a></li>
+        <li><a href="#" onclick="showSection('account')">My Account</a></li>
+    </ul>
+    
+    <div id="home" class="content">
+        <h2>Available Courses</h2>
+        <ul class="course-list">
+            <li>AI</li>
+            <li>Python</li>
+            <li>Java</li>
+            <li>C</li>
+            <li>C++</li>
+        </ul>
+    </div>
+    
+    <div id="quiz" class="content hidden">
+        <h2>Quiz Section</h2>
+        <ul>
+            <li><a href="#" onclick="showSection('pythonQuiz')">Python Quiz</a></li>
+            <li><a href="#" onclick="showSection('aiQuiz')">AI Quiz</a></li>
+        </ul>
+    </div>
+    
+    <div id="chatbotContainer">
+        <div id="chatbotHeader" onclick="toggleChatbot()">My AI Chatbot</div>
+        <div id="chatbotMessages"></div>
+        <div id="chatbotInputContainer">
+            <input type="text" id="chatbotInput" placeholder="Ask me anything...">
+            <button id="chatbotSend" onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+    <button id="chatbotButton" onclick="toggleChatbot()">💬</button>
+    
+    <script>
+        function toggleChatbot() {
+            const chatbot = document.getElementById("chatbotContainer");
+            chatbot.style.display = chatbot.style.display === "none" ? "block" : "none";
+        }
+        
+        function sendMessage() {
+            const inputField = document.getElementById("chatbotInput");
+            const message = inputField.value.trim();
+            if (message === "") return;
+            
+            const chatbox = document.getElementById("chatbotMessages");
+            const userMessage = `<div><strong>You:</strong> ${message}</div>`;
+            chatbox.innerHTML += userMessage;
+            inputField.value = "";
+            
+            setTimeout(() => {
+                const botResponse = `<div><strong>MyAI:</strong> I'm here to help! What do you want to know?</div>`;
+                chatbox.innerHTML += botResponse;
+                chatbox.scrollTop = chatbox.scrollHeight;
+            }, 1000);
+        }
+    </script>
+</body>
+</html>

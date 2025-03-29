@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Platform</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        ul { list-style-type: none; margin: 0; padding: 0; overflow: hidden; background-color: #3c8f56; }
+        li { float: left; }
+        li a { display: block; color: white; text-align: center; padding: 14px 16px; text-decoration: none; }
+        li a:hover { background-color: #111; }
+        .content { padding: 20px; }
+        .course-list, .account-details { text-align: left; max-width: 600px; margin: auto; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <ul>
+        <li><a href="#" onclick="showSection('home')">Home</a></li>
+        <li><a href="#" onclick="showSection('course')">Course</a></li>
+        <li><a href="#" onclick="showSection('quiz')">Quiz</a></li>
+        <li><a href="#" onclick="showSection('account')">My Account</a></li>
+    </ul>
+    
+    <div id="home" class="content">
+        <h2>Available Courses</h2>
+        <ul class="course-list">
+            <li>AI</li>
+            <li>Python</li>
+            <li>Java</li>
+            <li>C</li>
+            <li>C++</li>
+        </ul>
+    </div>
+    
+    <div id="course" class="content hidden">
+        <h2>Enrolled Courses</h2>
+        <ul class="course-list">
+            <li>Python</li>
+            <li>AI</li>
+        </ul>
+        <h3>Course Assessments</h3>
+        <ul>
+            <li><a href="#" onclick="showSection('quiz')">Python Quiz</a></li>
+            <li><a href="#" onclick="showSection('quiz')">AI Quiz</a></li>
+        </ul>
+    </div>
+    
+    <div id="quiz" class="content hidden">
+        <h2>Quiz Section</h2>
+        <p>Select a course quiz from the Course page.</p>
+    </div>
+    
+    <div id="account" class="content hidden">
+        <h2>My Account Details</h2>
+        <div class="account-details">
+            <p><strong>Name:</strong> John Doe</p>
+            <p><strong>College:</strong> XYZ University</p>
+            <p><strong>Branch:</strong> Computer Science</p>
+            <p><strong>Graduated:</strong> Yes</p>
+        </div>
+    </div>
+    
+    <script>
+        function showSection(sectionId) {
+            document.querySelectorAll('.content').forEach(section => section.classList.add('hidden'));
+            document.getElementById(sectionId).classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>

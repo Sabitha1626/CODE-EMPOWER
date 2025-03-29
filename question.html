@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Platform</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        ul { list-style-type: none; margin: 0; padding: 0; overflow: hidden; background-color: #3c8f56; }
+        li { float: left; }
+        li a { display: block; color: white; text-align: center; padding: 14px 16px; text-decoration: none; }
+        li a:hover { background-color: #111; }
+        .content { padding: 20px; }
+        .course-list, .account-details { text-align: left; max-width: 600px; margin: auto; }
+        .hidden { display: none; }
+        .quiz-container { width: 50%; margin: auto; padding: 20px; border: 1px solid #ccc; border-radius: 10px; }
+        .question { font-size: 20px; margin-bottom: 10px; }
+        .options { list-style: none; padding: 0; }
+        .options li { margin: 10px 0; }
+        button { padding: 10px 15px; font-size: 16px; cursor: pointer; margin: 10px; }
+    </style>
+</head>
+<body>
+    <ul>
+        <li><a href="#" onclick="showSection('home')">Home</a></li>
+        <li><a href="#" onclick="showSection('course')">Course</a></li>
+        <li><a href="#" onclick="showSection('quiz')">Quiz</a></li>
+        <li><a href="#" onclick="showSection('account')">My Account</a></li>
+    </ul>
+    
+    <div id="home" class="content">
+        <h2>Available Courses</h2>
+        <ul class="course-list">
+            <li>AI</li>
+            <li>Python</li>
+            <li>Java</li>
+            <li>C</li>
+            <li>C++</li>
+        </ul>
+    </div>
+    
+    <div id="quiz" class="content hidden">
+        <h2>Quiz Section</h2>
+        <ul>
+            <li><a href="#" onclick="showSection('pythonQuiz')">Python Quiz</a></li>
+            <li><a href="#" onclick="showSection('aiQuiz')">AI Quiz</a></li>
+        </ul>
+    </div>
+    
+    <div id="pythonQuiz" class="content hidden">
+        <h2>Python Quiz</h2>
+        <div id="pythonQuizContainer"></div>
+        <button onclick="submitQuiz('pythonQuizContainer', pythonQuizData)">Submit</button>
+        <button id="pythonRetestBtn" onclick="loadQuiz('pythonQuizContainer', pythonQuizData)" style="display: none;">Retest</button>
+        <h3 id="pythonResult"></h3>
+    </div>
+    
+    <div id="aiQuiz" class="content hidden">
+        <h2>AI Quiz</h2>
+        <div id="aiQuizContainer"></div>
+        <button onclick="submitQuiz('aiQuizContainer', aiQuizData)">Submit</button>
+        <button id="aiRetestBtn" onclick="loadQuiz('aiQuizContainer', aiQuizData)" style="display: none;">Retest</button>
+        <h3 id="aiResult"></h3>
+    </div>
+    
+    <script>
+        function showSection(sectionId) {
+            document.querySelectorAll('.content').forEach(section => section.classList.add('hidden'));
+            document.getElementById(sectionId).classList.remove('hidden');
+        }
+        
+        const pythonQuizData = [
+            { question: "Which of the following is a valid Python variable name?", options: ["2var", "var_name", "var-name"], answer: "var_name" },
+            { question: "What will be the output of print(3 * 'Python')?", options: ["PythonPythonPython", "Python3", "Error"], answer: "PythonPythonPython" },
+            { question: "Which data structure uses key-value pairs?", options: ["List", "Tuple", "Dictionary"], answer: "Dictionary" },
+            { question: "What is the default return type of input() function?", options: ["Integer", "String", "Float"], answer: "String" },
+            { question: "What keyword is used to exit a loop in Python?", options: ["stop", "exit", "break"], answer: "break" }
+        ];
+        
+        const aiQuizData = [
+            { question: "Which of the following is an application of AI?", options: ["Image Recognition", "Gravity Calculation", "Chemical Reactions"], answer: "Image Recognition" },
+            { question: "What type of AI mimics human cognitive abilities?", options: ["Weak AI", "Strong AI", "Narrow AI"], answer: "Strong AI" },
+            { question: "Which algorithm is commonly used in AI for pattern recognition?", options: ["Linear Regression", "Neural Networks", "Sorting Algorithms"], answer: "Neural Networks" },
+            { question: "Which language is widely used in AI development?", options: ["Python", "C++", "HTML"], answer: "Python" },
+            { question: "What is the term for AI systems improving over time without explicit reprogramming?", options: ["Deep Learning", "Machine Learning", "Static Programming"], answer: "Machine Learning" }
+        ];
+        
+        function loadQuiz(containerId, quizData) {
+            const quizContainer = document.getElementById(containerId);
+            quizContainer.innerHTML = "";
+            document.getElementById(containerId + "Result").innerText = "";
+            document.getElementById(containerId.replace("Container", "RetestBtn")).style.display = "none";
+            
+            quizData.forEach((q, index) => {
+                let questionBlock = document.createElement("div");
+                questionBlock.innerHTML = `<p class='question'>${q.question}</p>`;
+                let optionsList = document.createElement("ul");
+                optionsList.classList.add("options");
+                
+                q.options.forEach(option => {
+                    let listItem = document.createElement("li");
+                    listItem.innerHTML = `<input type='radio' name='q${index}' value='${option}'> ${option}`;
+                    optionsList.appendChild(listItem);
+                });
+                
+                questionBlock.appendChild(optionsList);
+                quizContainer.appendChild(questionBlock);
+            });
+        }
+        
+        function submitQuiz(containerId, quizData) {
+            let score = 0;
+            quizData.forEach((q, index) => {
+                let selectedOption = document.querySelector(`#${containerId} input[name='q${index}']:checked`);
+                if (selectedOption && selectedOption.value === q.answer) {
+                    score++;
+                }
+            });
+            
+            let percentage = (score / quizData.length) * 100;
+            let resultElement = document.getElementById(containerId + "Result");
+            let retestButton = document.getElementById(containerId.replace("Container", "RetestBtn"));
+            
+            if (percentage >= 85) {
+                resultElement.innerText = `Congratulations, move to next phase! You scored ${score} out of ${quizData.length} (${percentage.toFixed(2)}%)`;
+                retestButton.style.display = "none";
+            } else {
+                resultElement.innerText = `You scored ${score} out of ${quizData.length} (${percentage.toFixed(2)}%). You must retest until you pass.`;
+                retestButton.style.display = "block";
+            }
+        }
+        
+        loadQuiz('pythonQuizContainer', pythonQuizData);
+        loadQuiz('aiQuizContainer', aiQuizData);
+    </script>
+</body>
+</html>
